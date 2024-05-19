@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resume - Bootcamp / CV</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+<div class="background gradient"></div>
+<div class="page">
+  <header>
+    <nav>
+      <a href="/">
+        <span class="fas fa-user"></span>
+        <span class="link">About</span>
+      </a>
+      <a href="/resume" class="selected">
+        <span class="fas fa-file"></span>
+        <span class="link">Resume</span>
+      </a>
+      <a href="/contact">
+        <span class="fas fa-at"></span>
+        <span class="link">Contact</span>
+      </a>
+    </nav>
+  </header>
+  <main>
+    <section id="resume" class="resume view">
+      <h3 class="title">Resume</h3>
+      <article class="resume-lines">
+        <section class="resume-line line-left">
+          <h4 class="line-down"> <i class="fas fa-briefcase"></i> Experience</h4>
+          <article th:each="experience : ${resume.experiences}" class="line-down">
+            <div class="date active" th:text="${experience.date}">2013 - PRESENT</div>
+            <h5 class="name" th:text="${experience.jobTitle}">ART DIRECTOR</h5>
+            <h6 class="company" th:text="${experience.company}">FACEBOOK INC.</h6>
+            <p th:text="${experience.description}">Collaborate with creative and development teams on the execution of ideas.</p>
+          </article>
+        </section>
+        <section class="resume-line line-left">
+          <h4 class="line-down"><i class="fas fa-university"></i> Education</h4>
+          <article th:each="education : ${resume.educations}" class="line-down">
+            <div class="date" th:text="${education.date}">2006 - 2008</div>
+            <h5 class="name" th:text="${education.course}">ART DIRECTOR</h5>
+            <h6 class="company" th:text="${education.institution}">NEW YORK</h6>
+            <p th:text="${education.description}">Bachelor's Degree in Computer Science, ABC Technical Institute, Jefferson, Missouri</p>
+          </article>
+        </section>
+      </article>
+      <article class="resume-skills">
+        <h3 class="title">My Skills</h3>
+        <div>
+          <section class="line-left">
+            <h4 class="line-down"><i class="fas fa-tv"></i> DESIGN</h4>
+            <div class="line-down">
+              <div>Web Design</div>
+              <div>
+                <div style="width: 70%"></div>
+              </div>
+            </div>
+            <div class="line-down">
+              <div>Write Music</div>
+              <div>
+                <div style="width: 76%"></div>
+              </div>
+            </div>
+            <div class="line-down">
+              <div>Photoshop</div>
+              <div>
+                <div style="width: 66%"></div>
+              </div>
+            </div>
+            <div>
+              <div>Graphic Design</div>
+              <div>
+                <div style="width: 86%"></div>
+              </div>
+            </div>
+          </section>
+          <section class="line-left">
+            <h4 class="line-down"><i class="fas fa-code"></i> CODING</h4>
+            <div class="line-down">
+              <div>WordPress</div>
+              <div>
+                <div style="width: 50%"></div>
+              </div>
+            </div>
+            <div class="line-down">
+              <div>PHP/MYSQL</div>
+              <div>
+                <div style="width: 40%"></div>
+              </div>
+            </div>
+            <div class="line-down">
+              <div>Angular/JavaScript</div>
+              <div>
+                <div style="width: 95%"></div>
+              </div>
+            </div>
+            <div>
+              <div>HTML/CSS</div>
+              <div>
+                <div style="width: 100%"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </article>
+    </section>
+  </main>
+</div>
+</body>
+
+</html>
