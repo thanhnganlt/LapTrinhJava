@@ -14,12 +14,15 @@
             <th>Tên</th>
             <th>Tuổi</th>
             <th>Khoa</th>
+            <th>Ảnh</th>
         </tr>
         </thead>
-        <tbody><tr>
+        <tbody>
+        <tr>
             <td th:text="${sinhVien.ten}">Tên mặc định</td>
             <td th:text="${sinhVien.tuoi}">Tuổi mặc định</td>
             <td th:text="${sinhVien.khoa}">Khoa mặc định</td>
+            <td><img th:src="@{'/images/' + ${sinhVien.anh}}" alt="Ảnh Sinh Viên" width="100"/></td>
         </tr>
         </tbody>
     </table>
