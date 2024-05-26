@@ -1,57 +1,71 @@
 package com.example.SinhVien.controller;
 
 import com.example.SinhVien.model.SinhVien;
-import jakarta.validation.Valid;
+import com.example.SinhVien.services.LopService;
+import com.example.SinhVien.services.MonHocService;
+import com.example.SinhVien.services.SinhVienService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.List;
 
 @Controller
+@RequestMapping("/sinhVien")
 public class SinhVienController {
-    private static String UPLOADED_FOLDER = "src/main/resources/static/images/";
+    @Autowired
+    private SinhVienService sinhVienService;
 
-    @GetMapping("/sinhvien")
-    public String showForm(Model model) {
+    @Autowired
+    private LopService lopService;
+
+    @Autowired
+    private MonHocService monHocService;
+
+    @GetMapping
+    public String showAllSinhVien(Model model) {
+        List<SinhVien> dsSinhVien = sinhVienService.getAllSinhVien();
+        model.addAttribute("dsSinhVien", dsSinhVien);
+        return "sinhVien/list";
+    }
+
+    @GetMapping("/add")
+    public String showAddForm(Model model) {
         model.addAttribute("sinhVien", new SinhVien());
-        return "SinhVien/form-sinhvien";
+        model.addAttribute("danhSachLop", lopService.getAllLop());
+        model.addAttribute("danhSachMonHoc", monHocService.getAllMonHoc());
+        return "sinhVien/add";
     }
 
-    @PostMapping("/sinhvien")
-    public String submitForm(@Valid SinhVien sinhVien, BindingResult bindingResult,
-                             Model model) {
-        if (bindingResult.hasErrors()) {
-            return "SinhVien/form-sinhvien";
-        }
+    @PostMapping("/add")
+    public String addSinhVien(@ModelAttribute("sinhVien") SinhVien sinhVien) {
+        sinhVienService.addSinhVien(sinhVien);
+        return "redirect:/sinhVien";
+    }
 
-        // Lưu ảnh
-        MultipartFile file = sinhVien.getAnhFile();
-        if (file != null && !file.isEmpty()) {
-            try {
-                // Đảm bảo thư mục lưu trữ tồn tại
-                Path uploadPath = Paths.get(UPLOADED_FOLDER);
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
-
-                byte[] bytes = file.getBytes();
-                Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
-                Files.write(path, bytes);
-                sinhVien.setAnh(file.getOriginalFilename());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable String id, Model model) {
+        SinhVien sinhVien = sinhVienService.getSinhVienById(id);
+        if (sinhVien != null) {
             model.addAttribute("sinhVien", sinhVien);
-            model.addAttribute("message", "Sinh viên đã được thêm thành công!");
-            return "SinhVien/result-sinhvien";
+            model.addAttribute("danhSachLop", lopService.getAllLop());
+            model.addAttribute("danhSachMonHoc", monHocService.getAllMonHoc());
+            return "sinhVien/edit";
+        } else {
+            return "redirect:/sinhVien";
         }
     }
+
+    @PostMapping("/edit")
+    public String updateSinhVien(@ModelAttribute("sinhVien") SinhVien sinhVien) {
+        sinhVienService.updateSinhVien(sinhVien);
+        return "redirect:/sinhVien";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteSinhVien(@PathVariable String id) {
+        sinhVienService.deleteSinhVien(id);
+        return "redirect:/sinhVien";
+    }
+}
