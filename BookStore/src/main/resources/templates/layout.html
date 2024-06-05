@@ -25,12 +25,12 @@
           <li class="nav-item"> <a class="nav-link" href="/categories">Danh mục sách</a></li>
           <li class="nav-item"><a class="nav-link" href="/books/add">Thêm sách</a></li>
           <li class="nav-item"><a class="nav-link" href="/categories/add">Thêm danh mục</a></li>
-          <li sec:autherize="isAutherticated">
+          <li sec:authorize="isAuthenticated()">
             <form th:action="@{/logout}" method="post">
               <button class="btn btn-outline-primary" type="submit">Đăng xuất</button>
             </form>
           </li>
-          <li sec:autherize="isAutherticated">
+          <li sec:authorize="!isAuthenticated()">
             <a href="/login" class="btn btn-outline-primary" >Đăng nhập</a>
           </li>
         </ul>

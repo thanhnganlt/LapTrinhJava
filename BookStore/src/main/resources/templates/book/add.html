@@ -31,7 +31,7 @@
         <option value="">-- Chọn thể loại --</option>
         <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
       </select>
-      <div class="text-danger" th:if="${#fiels.hasError('category')}" th:text ="*{category}"></div>
+      <div class="text-danger" th:if="${#fields.hasErrors('category')}" th:text ="*{category}"></div>
     </div>
     <input type="submit" class="btn btn-primary" value="Lưu">
   </form>

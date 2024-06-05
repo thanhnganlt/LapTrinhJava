@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -33,7 +34,12 @@ public class SecurityConfig {
         auth.setPasswordEncoder(passwordEncoder());
         return auth;
     }
-
+    @Bean
+    public AccessDeniedHandler customAccessDeniedHandler()
+    {
+        return (request, response, accessDeniedException)
+                -> response.sendRedirect( request.getContextPath() + "/403");
+    }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
             Exception {
@@ -43,9 +49,9 @@ public class SecurityConfig {
                                 "/error")
                         .permitAll()
                         .requestMatchers( "/books/edit", "/books/delete")
-                        .authenticated()
+                        .hasAnyAuthority("ADMIN")
                         .requestMatchers("/books", "/books/add")
-                        .authenticated()
+                        .hasAnyAuthority("ADMIN","USER")
                         .anyRequest().authenticated()
                 )
                 .logout(logout -> logout.logoutUrl("/logout")
@@ -65,7 +71,7 @@ public class SecurityConfig {
                         .userDetailsService(userDetailsService())
                 )
                 .exceptionHandling(exceptionHandling ->
-                        exceptionHandling.accessDeniedPage("/403"))
+                        exceptionHandling.accessDeniedHandler(customAccessDeniedHandler()))
                 .build();
     }
 }
